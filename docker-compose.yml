@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgrespw1234
+      - POSTGRES_DB=auctions
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postresql/data
+volumes:
+    pgdata:
