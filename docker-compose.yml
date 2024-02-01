@@ -14,7 +14,7 @@ services:
   mongodb:
     image: mongo
     environment:
-      - MONGO_INITDB_DATABASE=search
+      - MONGO_INITDB_DATABASE=SearchDb
     ports:
       - 27017:27017
     volumes:
