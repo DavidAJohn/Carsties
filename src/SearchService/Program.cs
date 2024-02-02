@@ -1,7 +1,10 @@
-using Polly.Extensions.Http;
+using MassTransit;
 using Polly;
+using Polly.Extensions.Http;
 using SearchService.Data;
+using SearchService.RequestHelpers;
 using SearchService.Services;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -15,6 +18,20 @@ builder.Services.AddHttpClient("AuctionSvc", client => client.BaseAddress =
     .AddPolicyHandler(GetRetryPolicy());
 
 builder.Services.AddScoped<AuctionService>();
+
+builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumers(Assembly.GetEntryAssembly());
+
+    x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("search", false));
+
+    x.UsingRabbitMq((ctx, cfg) =>
+    {
+        cfg.ConfigureEndpoints(ctx);
+    });
+});
 
 var app = builder.Build();
 
