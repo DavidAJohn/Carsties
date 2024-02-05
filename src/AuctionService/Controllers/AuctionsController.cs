@@ -62,15 +62,16 @@ public class AuctionsController : ControllerBase
         auction.Seller = "test"; // temp value until Identity is implemented
 
         _context.Auctions.Add(auction);
+
+        var newAuction = _mapper.Map<AuctionDTO>(auction);
+        await _publishEndpoint.Publish(_mapper.Map<AuctionCreated>(newAuction));
+
         var result = await _context.SaveChangesAsync() > 0;
 
         if (!result)
         {
             return BadRequest();
         }
-
-        var newAuction = _mapper.Map<AuctionDTO>(auction);
-        await _publishEndpoint.Publish(_mapper.Map<AuctionCreated>(newAuction));
 
         return CreatedAtAction(nameof(GetAuctionById), new { id = auction.Id }, _mapper.Map<AuctionDTO>(auction));
     }
@@ -92,6 +93,8 @@ public class AuctionsController : ControllerBase
         auction.Item.Color = updateAuctionDTO.Color ?? auction.Item.Color;
         auction.Item.Mileage = updateAuctionDTO.Mileage <= 1 ? auction.Item.Mileage : updateAuctionDTO.Mileage;
         auction.Item.Year = updateAuctionDTO.Year < auction.Item.Year ? auction.Item.Year : updateAuctionDTO.Year;
+
+        await _publishEndpoint.Publish(_mapper.Map<AuctionUpdated>(auction));
 
         var result = await _context.SaveChangesAsync() > 0;
 
@@ -116,6 +119,9 @@ public class AuctionsController : ControllerBase
         }
 
         _context.Auctions.Remove(auction);
+
+        await _publishEndpoint.Publish<AuctionDeleted>(new { Id = auction.Id.ToString() });
+
         var result = await _context.SaveChangesAsync() > 0;
 
         if (!result)

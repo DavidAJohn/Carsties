@@ -1,6 +1,7 @@
 using MassTransit;
 using Polly;
 using Polly.Extensions.Http;
+using SearchService.Consumers;
 using SearchService.Data;
 using SearchService.RequestHelpers;
 using SearchService.Services;
@@ -14,7 +15,7 @@ var config = builder.Configuration;
 builder.Services.AddControllers();
 
 builder.Services.AddHttpClient("AuctionSvc", client => client.BaseAddress =
-    new Uri(config.GetValue<string>("AuctionServiceUrl") + "/api"))
+    new Uri(config.GetValue<string>("AuctionServiceUrl") + "/api/"))
     .AddPolicyHandler(GetRetryPolicy());
 
 builder.Services.AddScoped<AuctionService>();
@@ -29,6 +30,12 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((ctx, cfg) =>
     {
+        cfg.ReceiveEndpoint("search-auction-created", e =>
+        {
+            e.UseMessageRetry(r => r.Interval(5, 5));
+            e.ConfigureConsumer<AuctionCreatedConsumer>(ctx);
+        });
+
         cfg.ConfigureEndpoints(ctx);
     });
 });

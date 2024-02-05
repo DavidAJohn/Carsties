@@ -19,20 +19,26 @@ public class SearchController : ControllerBase
             query.Match(Search.Full, searchParams.SearchTerm).SortByTextScore();
         }
 
-        query = searchParams.OrderBy switch
+        if (!string.IsNullOrWhiteSpace(searchParams.OrderBy))
         {
-            "make" => query.Sort(x => x.Ascending(a => a.Make)),
-            "model" => query.Sort(x => x.Ascending(a => a.Model)),
-            "new" => query.Sort(x => x.Descending(a => a.CreatedAt)),
-            _ => query.Sort(x => x.Ascending(a => a.AuctionEnd))
-        };
+            query = searchParams.OrderBy switch
+            {
+                "make" => query.Sort(x => x.Ascending(a => a.Make)),
+                "model" => query.Sort(x => x.Ascending(a => a.Model)),
+                "new" => query.Sort(x => x.Descending(a => a.CreatedAt)),
+                _ => query.Sort(x => x.Ascending(a => a.AuctionEnd))
+            };
+        }
 
-        query = searchParams.FilterBy switch
+        if (!string.IsNullOrWhiteSpace(searchParams.FilterBy))
         {
-            "finished" => query.Match(x => x.AuctionEnd < DateTime.UtcNow),
-            "endingSoon" => query.Match(x => x.AuctionEnd < DateTime.UtcNow.AddHours(6) && x.AuctionEnd > DateTime.UtcNow),
-            _ => query.Match(x => x.AuctionEnd > DateTime.UtcNow)
-        };
+            query = searchParams.FilterBy switch
+            {
+                "finished" => query.Match(x => x.AuctionEnd < DateTime.UtcNow),
+                "endingSoon" => query.Match(x => x.AuctionEnd < DateTime.UtcNow.AddHours(6) && x.AuctionEnd > DateTime.UtcNow),
+                _ => query.Match(x => x.AuctionEnd > DateTime.UtcNow)
+            };
+        }
 
         if (!string.IsNullOrWhiteSpace(searchParams.Seller))
         {

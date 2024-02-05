@@ -21,7 +21,7 @@ public class AuctionService
             .ExecuteFirstAsync();
         
         var client = _httpClient.CreateClient("AuctionSvc");
-        var response = await client.GetAsync($"/auctions?date={lastUpdated}");
+        var response = await client.GetAsync(client.BaseAddress + "auctions?date=" + lastUpdated);
 
         if (response.IsSuccessStatusCode)
         {

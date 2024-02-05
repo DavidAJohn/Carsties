@@ -19,6 +19,13 @@ builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
 builder.Services.AddMassTransit(x =>
 {
+    x.AddEntityFrameworkOutbox<AuctionDbContext>(opt =>
+    {
+        opt.QueryDelay = TimeSpan.FromSeconds(10);
+        opt.UsePostgres();
+        opt.UseBusOutbox();
+    });
+
     x.AddConsumers(Assembly.GetEntryAssembly());
 
     x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("auction", false));
