@@ -5,6 +5,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Contracts;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -55,11 +56,25 @@ public class AuctionsController : ControllerBase
         return Ok(_mapper.Map<AuctionDTO>(auction));
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> CreateAuction(CreateAuctionDTO createAuctionDTO)
     {
         var auction = _mapper.Map<Auction>(createAuctionDTO);
-        auction.Seller = "test"; // temp value until Identity is implemented
+
+        if (User == null)
+        {
+            return Forbid();
+        }
+
+        if (User.Identity?.Name == null)
+        {
+            return Forbid();
+        }
+        else
+        {
+            auction.Seller = User.Identity.Name;
+        }
 
         _context.Auctions.Add(auction);
 
@@ -76,6 +91,7 @@ public class AuctionsController : ControllerBase
         return CreatedAtAction(nameof(GetAuctionById), new { id = auction.Id }, _mapper.Map<AuctionDTO>(auction));
     }
 
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAuction(Guid id, UpdateAuctionDTO updateAuctionDTO)
     {
@@ -83,9 +99,11 @@ public class AuctionsController : ControllerBase
             .Include(a => a.Item)
             .FirstOrDefaultAsync(a => a.Id == id);
 
-        if (auction == null)
+        if (auction == null) return NotFound();
+
+        if (User == null || User.Identity?.Name == null || auction.Seller != User.Identity?.Name)
         {
-            return NotFound();
+            return Forbid();
         }
 
         auction.Item.Make = updateAuctionDTO.Make ?? auction.Item.Make;
@@ -106,6 +124,7 @@ public class AuctionsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAuction(Guid id)
     {
@@ -116,6 +135,11 @@ public class AuctionsController : ControllerBase
         if (auction == null)
         {
             return NotFound();
+        }
+
+        if (User == null || User.Identity?.Name == null || auction.Seller != User.Identity?.Name)
+        {
+            return Forbid();
         }
 
         _context.Auctions.Remove(auction);
