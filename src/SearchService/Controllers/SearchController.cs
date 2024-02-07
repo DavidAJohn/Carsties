@@ -18,6 +18,10 @@ public class SearchController : ControllerBase
         {
             query.Match(Search.Full, searchParams.SearchTerm).SortByTextScore();
         }
+        else
+        {
+            query.Sort(x => x.Ascending(a => a.AuctionEnd));
+        }
 
         if (!string.IsNullOrWhiteSpace(searchParams.OrderBy))
         {
