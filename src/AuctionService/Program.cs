@@ -33,6 +33,8 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((ctx, cfg) =>
     {
+        cfg.Host(config["RabbitMq:Host"]);
+
         cfg.ConfigureEndpoints(ctx);
     });
 });
