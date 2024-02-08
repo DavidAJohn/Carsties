@@ -1,0 +1,45 @@
+version: '3.4'
+
+services:
+  postgres.carsties:
+    container_name: postgres.carsties
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgrespw1234
+      - POSTGRES_DB=auctions
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postresql/data
+      
+  mongodb.carsties:
+    container_name: mongodb.carsties
+    environment:
+      - MONGO_INITDB_DATABASE=SearchDb
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodata:/var/lib/mongodb/data
+      
+  rabbitmq.carsties:
+    container_name: rabbitmq.carsties
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  auctionservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:DefaultConnection=Server=postgres.carsties:5432;User Id=postgres;Password=postgrespw1234;Database=auctions"
+    ports:
+      - 7001:80
+    depends_on:
+      - postgres.carsties
+      - rabbitmq.carsties
+
+volumes:
+  pgdata:
+  mongodata:

@@ -1,29 +1,17 @@
 version: '3.4'
 
 services:
-  postgres:
+  postgres.carsties:
     image: postgres
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgrespw1234
-      - POSTGRES_DB=auctions
-    ports:
-      - 5432:5432
-    volumes:
-      - pgdata:/var/lib/postresql/data
-  mongodb:
+    
+  mongodb.carsties:
     image: mongo
-    environment:
-      - MONGO_INITDB_DATABASE=SearchDb
-    ports:
-      - 27017:27017
-    volumes:
-      - mongodata:/var/lib/mongodb/data
-  rabbitmq:
+  
+  rabbitmq.carsties:
     image: rabbitmq:3-management-alpine
-    ports:
-      - 5672:5672
-      - 15672:15672
-volumes:
-    pgdata:
-    mongodata:
+
+  auctionservice:
+    image: ${DOCKER_REGISTRY-}auctionservice
+    build:
+      context: .
+      dockerfile: src/AuctionService/Dockerfile

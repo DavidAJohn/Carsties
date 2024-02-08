@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "src\Contracts\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityService", "src\IdentityService\IdentityService.csproj", "{7A1C825E-1763-43C7-AB54-FD70D29B4A0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatewayService", "src\GatewayService\GatewayService.csproj", "{3EBCF651-C66E-4F23-9E9F-C7650FB691C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GatewayService", "src\GatewayService\GatewayService.csproj", "{3EBCF651-C66E-4F23-9E9F-C7650FB691C4}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{65AA319B-2A54-4BA3-8211-3473192F9EA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{3EBCF651-C66E-4F23-9E9F-C7650FB691C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EBCF651-C66E-4F23-9E9F-C7650FB691C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EBCF651-C66E-4F23-9E9F-C7650FB691C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65AA319B-2A54-4BA3-8211-3473192F9EA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65AA319B-2A54-4BA3-8211-3473192F9EA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65AA319B-2A54-4BA3-8211-3473192F9EA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65AA319B-2A54-4BA3-8211-3473192F9EA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
