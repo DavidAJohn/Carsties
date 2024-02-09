@@ -21,3 +21,9 @@ services:
     build:
       context: .
       dockerfile: src/IdentityService/Dockerfile
+
+  searchservice:
+    image: ${DOCKER_REGISTRY-}searchservice
+    build:
+      context: .
+      dockerfile: src/SearchService/Dockerfile

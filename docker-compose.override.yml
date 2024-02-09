@@ -53,6 +53,19 @@ services:
     depends_on:
       - postgres.carsties
 
+  searchservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:MongoDbConnection=mongodb://mongodb.carsties:27017"
+      - "AuctionServiceUrl=http://auctionservice"
+      - "RabbitMq:Host=amqp://guest:guest@rabbitmq.carsties:5672"
+    ports:
+      - 7002:80
+    depends_on:
+      - mongodb.carsties
+      - rabbitmq.carsties
+
 volumes:
   pgdata:
   mongodata:
