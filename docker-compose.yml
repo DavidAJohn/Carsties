@@ -27,3 +27,9 @@ services:
     build:
       context: .
       dockerfile: src/SearchService/Dockerfile
+
+  gatewayservice:
+    image: ${DOCKER_REGISTRY-}gatewayservice
+    build:
+      context: .
+      dockerfile: src/GatewayService/Dockerfile
