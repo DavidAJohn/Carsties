@@ -52,6 +52,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters.NameClaimType = "username";
     });
     
+builder.Services.AddScoped<IAuctionRepository, AuctionRepository>();
+
 
 var app = builder.Build();
 
