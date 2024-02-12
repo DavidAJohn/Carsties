@@ -54,7 +54,7 @@ public class AuctionsController : ControllerBase
             return Forbid();
         }
 
-        if (User.Identity?.Name == null)
+        if (string.IsNullOrWhiteSpace(User.Identity?.Name))
         {
             return Forbid();
         }
@@ -86,7 +86,7 @@ public class AuctionsController : ControllerBase
 
         if (auction == null) return NotFound();
 
-        if (User == null || User.Identity?.Name == null || auction.Seller != User.Identity?.Name)
+        if (User == null || string.IsNullOrWhiteSpace(User.Identity?.Name) || auction.Seller != User.Identity?.Name)
         {
             return Forbid();
         }
@@ -120,7 +120,7 @@ public class AuctionsController : ControllerBase
             return NotFound();
         }
 
-        if (User == null || User.Identity?.Name == null || auction.Seller != User.Identity?.Name)
+        if (User == null || string.IsNullOrWhiteSpace(User.Identity?.Name) || auction.Seller != User.Identity?.Name)
         {
             return Forbid();
         }
