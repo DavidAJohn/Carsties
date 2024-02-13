@@ -5,15 +5,13 @@ using AuctionService.IntegrationTests.Util;
 using Contracts;
 using MassTransit.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net.Http.Json;
 using System.Net;
-using AuctionService.Entities;
-using Newtonsoft.Json;
-using MassTransit;
+using System.Net.Http.Json;
 
 namespace AuctionService.IntegrationTests;
 
-public class AuctionBusTests : IClassFixture<CustomWebAppFactory>, IAsyncLifetime
+[Collection("SharedFixture")]
+public class AuctionBusTests : IAsyncLifetime
 {
     private readonly CustomWebAppFactory _factory;
     private readonly HttpClient _httpClient;

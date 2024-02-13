@@ -8,7 +8,8 @@ using System.Net.Http.Json;
 
 namespace AuctionService.IntegrationTests;
 
-public class AuctionsControllerTests : IClassFixture<CustomWebAppFactory>, IAsyncLifetime
+[Collection("SharedFixture")]
+public class AuctionsControllerTests : IAsyncLifetime
 {
     private readonly CustomWebAppFactory _factory;
     private readonly HttpClient _httpClient;
