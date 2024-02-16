@@ -14,13 +14,16 @@ public class SearchController : ControllerBase
     {
         var query= DB.PagedSearch<Item, Item>();
 
-        if (!string.IsNullOrWhiteSpace(searchParams.SearchTerm))
+        if (string.IsNullOrWhiteSpace(searchParams.SearchTerm))
         {
-            query.Match(Search.Full, searchParams.SearchTerm).SortByTextScore();
+            if (string.IsNullOrWhiteSpace(searchParams.OrderBy)) // only add a default sort if there's also no order by
+            {
+                query.Sort(x => x.Ascending(a => a.AuctionEnd));
+            }
         }
         else
         {
-            query.Sort(x => x.Ascending(a => a.AuctionEnd));
+            query.Match(Search.Full, searchParams.SearchTerm).SortByTextScore();
         }
 
         if (!string.IsNullOrWhiteSpace(searchParams.OrderBy))
