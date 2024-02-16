@@ -3,9 +3,11 @@ import { Button } from 'flowbite-react';
 import ButtonGroup from 'flowbite-react/lib/esm/components/Button/ButtonGroup';
 import React from 'react'
 import { AiOutlineClockCircle, AiOutlineSortAscending } from 'react-icons/ai';
-import { BsFillStopCircleFill } from 'react-icons/bs';
+import { BsFillStopCircleFill, BsStopwatchFill } from 'react-icons/bs';
+import { GiFinishLine, GiFlame } from 'react-icons/gi';
 
 const pageSizeButtons = [4, 8, 12];
+
 const orderByButtons = [
     {
         label: 'Alphabetical (By Make)',
@@ -29,13 +31,48 @@ const orderByButtons = [
     }
 ]
 
+const filterByButtons = [
+    {
+        label: 'Live Auctions',
+        icon: GiFlame,
+        value: 'live'
+    },
+    {
+        label: 'Ending Soon',
+        icon: GiFinishLine,
+        value: 'endingSoon'
+    },
+    {
+        label: 'Completed',
+        icon: BsStopwatchFill,
+        value: 'finished'
+    }
+]
+
 export default function Filters() {
   const pageSize = useParamsStore(state => state.pageSize);
   const setParams = useParamsStore(state => state.setParams);
   const orderBy = useParamsStore(state => state.orderBy);
+  const filterBy = useParamsStore(state => state.filterBy);
 
   return (
     <div className='flex justify-between items-center mb-4'>
+        <div>
+            <span className='uppercase text-sm text-gray-500 mr-2'>Filter By</span>
+            <ButtonGroup>
+                {filterByButtons.map(({label, icon: Icon, value}) => (
+                    <Button 
+                        key={value}
+                        onClick={() => setParams({filterBy: value})}
+                        color={`${filterBy === value ? 'red' : 'gray'}`}
+                        className='focus:ring-0'
+                    >
+                        <Icon className='mr-3 h-4 w-4' />
+                        {label}
+                    </Button>
+                ))}
+            </ButtonGroup>
+        </div>
         <div>
             <span className='uppercase text-sm text-gray-500 mr-2'>Order By</span>
             <ButtonGroup>
