@@ -5,7 +5,7 @@ import React, { useEffect } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import Input from '../components/Input';
 import DateInput from '../components/DateInput';
-import { createAuction } from '../actions/auctionActions';
+import { createAuction, updateAuction } from '../actions/auctionActions';
 import { usePathname, useRouter } from 'next/navigation';
 import { Auction } from '@/types';
 import toast from 'react-hot-toast';
@@ -17,22 +17,37 @@ type Props = {
 export default function AuctionForm({ auction }: Props) {
     const router = useRouter();
     const pathname = usePathname();
+
     const { control, handleSubmit, setFocus, reset,
         formState: { isSubmitting, isValid } } = useForm({
             mode: 'onTouched'
         });
 
     useEffect(() => {
+        if (auction) {
+            const {make, model, color, mileage, year} = auction;
+            reset({make, model, color, mileage, year});
+        }
         setFocus('make');
-    }, [setFocus])
+    }, [setFocus, reset, auction])
 
     async function onSubmit(data: FieldValues) {
         try {
-            const res = await createAuction(data);
+            let id = '';
+            let res;
+            if (pathname === '/auctions/create/') {
+                res = await createAuction(data);
+                id = res.id;
+            } else {
+                if (auction) {
+                    res = await updateAuction(data, auction.id);
+                    id = auction.id;
+                }
+            }
             if (res.error) {
                 throw res.error;
             }
-            router.push(`/auctions/details/${res.id}`)
+            router.push(`/auctions/details/${id}`)
         } catch (error: any) {
             toast.error(error.status + ' ' + error.message)
         }
