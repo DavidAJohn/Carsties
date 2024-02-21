@@ -23,7 +23,14 @@ public class AuctionUpdatedConsumer : IConsumer<AuctionUpdated>
 
         var result = await DB.Update<Item>()
             .MatchID(item.ID)
-            .ModifyOnly(i => new { i.Model, i.Color, i.Mileage, i.ReservePrice, i.AuctionEnd }, item)
+            .ModifyOnly(x => new
+            {
+                x.Make,
+                x.Model,
+                x.Color,
+                x.Year,
+                x.Mileage
+            }, item)
             .ExecuteAsync();
 
         if (!result.IsAcknowledged)
