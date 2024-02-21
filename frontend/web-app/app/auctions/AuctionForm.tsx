@@ -35,7 +35,7 @@ export default function AuctionForm({ auction }: Props) {
         try {
             let id = '';
             let res;
-            if (pathname === '/auctions/create/') {
+            if (pathname === '/auctions/create') {
                 res = await createAuction(data);
                 id = res.id;
             } else {
@@ -87,7 +87,7 @@ export default function AuctionForm({ auction }: Props) {
                     name='mileage' 
                     control={control} 
                     type='number'
-                    rules={{ required: 'Model is required' }} 
+                    rules={{ required: 'Mileage is required' }} 
                 />
             </div>
 
