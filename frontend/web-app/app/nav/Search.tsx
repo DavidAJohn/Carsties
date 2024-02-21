@@ -1,11 +1,15 @@
 'use client'
 
 import { useParamsStore } from '@/hooks/useParamsStore';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import { FaArrowRotateLeft } from "react-icons/fa6";
 
 export default function Search() {
+    const router = useRouter();
+    const pathname = usePathname();
+
     const setParams = useParamsStore(state => state.setParams);
     const reset = useParamsStore(state => state.reset);
     const [value, setValue] = useState('');
@@ -16,6 +20,7 @@ export default function Search() {
 
     function search() {
         if (value === '') return;
+        if (pathname !== '/') router.push('/');
         setParams({searchTerm: value});
     }
 
