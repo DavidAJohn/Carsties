@@ -30,3 +30,7 @@ export async function updateAuction(data: FieldValues, id: string) {
     revalidatePath(`/auctions/${id}`);
     return res;
 }
+
+export async function deleteAuction(id: string) {
+    return await fetchWrapper.del(`auctions/${id}`);
+}
