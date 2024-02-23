@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "Auction/Bidding Local",
+    "Projects": [
+      {
+        "Name": "src\\AuctionService\\AuctionService.csproj",
+        "Action": "Start",
+        "DebugTarget": ""
+      },
+      {
+        "Name": "src\\BiddingService\\BiddingService.csproj",
+        "Action": "Start",
+        "DebugTarget": ""
+      }
+    ]
+  }
+]
