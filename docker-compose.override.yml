@@ -33,11 +33,17 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_URLS=http://+:7777
       - "ConnectionStrings:DefaultConnection=Server=postgres.carsties:5432;User Id=postgres;Password=postgrespw1234;Database=auctions"
       - "RabbitMq:Host=amqp://guest:guest@rabbitmq.carsties:5672"
       - "IdentityServiceUrl=http://identityservice"
+      - "Kestrel:Endpoints:Grpc:Protocols=Http2"
+      - "Kestrel:Endpoints:Grpc:Url=http://+:7777"
+      - "Kestrel:Endpoints:WebApi:Protocols=Http1"
+      - "Kestrel:Endpoints:WebApi:Url=http://+:80"
     ports:
       - 7001:80
+      - 7777:7777
     depends_on:
       - postgres.carsties
       - rabbitmq.carsties
@@ -72,6 +78,22 @@ services:
       - ASPNETCORE_URLS=http://+:80
     ports:
       - 6001:80
+
+  biddingservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "ConnectionStrings:BidDbConnection=mongodb://mongodb.carsties:27017"
+      - "IdentityServiceUrl=http://identityservice"
+      - "RabbitMq:Host=amqp://guest:guest@rabbitmq.carsties:5672"
+      - "GrpcAuction=http://auctionservice:7777"
+    ports:
+      - 7003:80
+    depends_on:
+      - mongodb.carsties
+      - rabbitmq.carsties
+      - identityservice
+      - auctionservice
 
 volumes:
   pgdata:

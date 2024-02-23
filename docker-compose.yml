@@ -33,3 +33,9 @@ services:
     build:
       context: .
       dockerfile: src/GatewayService/Dockerfile
+
+  biddingservice:
+    image: ${DOCKER_REGISTRY-}biddingservice
+    build:
+      context: .
+      dockerfile: src/BiddingService/Dockerfile
