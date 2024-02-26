@@ -95,6 +95,16 @@ services:
       - identityservice
       - auctionservice
 
+  notificationservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - "RabbitMq:Host=amqp://guest:guest@rabbitmq.carsties:5672"
+    ports:
+      - 7004:80
+    depends_on:
+      - rabbitmq.carsties
+
 volumes:
   pgdata:
   mongodata:

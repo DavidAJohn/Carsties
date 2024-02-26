@@ -39,3 +39,9 @@ services:
     build:
       context: .
       dockerfile: src/BiddingService/Dockerfile
+
+  notificationservice:
+    image: ${DOCKER_REGISTRY-}notificationservice
+    build:
+      context: .
+      dockerfile: src/NotificationService/Dockerfile
