@@ -105,6 +105,19 @@ services:
     depends_on:
       - rabbitmq.carsties
 
+  web-app:
+    environment:
+      - NEXTAUTH_SECRET=tLfsQHbX%u@&^Vz5vmAhYA6Zq64r3v&i
+      - NEXTAUTH_URL=http://web-app
+      - API_URL=http://gatewayservice/
+      - ID_URL=http://identityservice
+      - NEXT_PUBLIC_NOTIFY_URL=http://gatewayservice/notifications
+    ports:
+      - 3000:3000
+    volumes:
+      - webdata:/var/lib/web/data
+
 volumes:
   pgdata:
   mongodata:
+  webdata:

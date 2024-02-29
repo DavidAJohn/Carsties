@@ -45,3 +45,9 @@ services:
     build:
       context: .
       dockerfile: src/NotificationService/Dockerfile
+
+  web-app:
+    image: ${DOCKER_REGISTRY-}web-app
+    build:
+      context: .
+      dockerfile: frontend/web-app/Dockerfile
