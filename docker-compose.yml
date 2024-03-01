@@ -51,3 +51,8 @@ services:
     build:
       context: .
       dockerfile: frontend/web-app/Dockerfile
+
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro

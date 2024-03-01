@@ -54,8 +54,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
       - "ConnectionStrings:DefaultConnection=Server=postgres.carsties:5432;User Id=postgres;Password=postgrespw1234;Database=identity"
-    ports:
-      - 80:80
+      - VIRTUAL_HOST=id.carsties.com
+      - ClientApp=http://app.carsties.com
     depends_on:
       - postgres.carsties
 
@@ -76,8 +76,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
-    ports:
-      - 6001:80
+      - ClientApp=http://app.carsties.com
+      - VIRTUAL_HOST=api.carsties.com
 
   biddingservice:
     environment:
@@ -108,18 +108,23 @@ services:
   web-app:
     environment:
       - NEXTAUTH_SECRET=tLfsQHbX%u@&^Vz5vmAhYA6Zq64r3v&i
-      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_URL=http://app.carsties.com
       - NEXTAUTH_URL_INTERNAL=http://web-app:3000
       - API_URL=http://gatewayservice/
       - ID_URL=http://id.carsties.com
       - NEXT_PUBLIC_NOTIFY_URL=http://gatewayservice/notifications
-    ports:
-      - 3000:3000
+      - VIRTUAL_HOST=app.carsties.com
+      - VIRTUAL_PORT=3000
     links:
       - "identityservice:id.carsties.com"
     volumes:
       - webdata:/var/lib/web/data
 
+  nginx-proxy:
+    container_name: nginx-proxy
+    ports:
+      - 80:80
+    
 volumes:
   pgdata:
   mongodata:
