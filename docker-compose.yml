@@ -56,3 +56,4 @@ services:
     image: nginxproxy/nginx-proxy
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./devcerts:/etc/nginx/certs
