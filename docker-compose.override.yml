@@ -76,7 +76,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
-      - ClientApp=http://app.carsties.com
+      - ClientApp=https://app.carsties.com
       - VIRTUAL_HOST=api.carsties.com
 
   biddingservice:
