@@ -32,6 +32,12 @@ builder.Services.AddMassTransit(x =>
     {
         cfg.Host(config["RabbitMq:Host"]);
 
+        cfg.UseMessageRetry(r =>
+        {
+            r.Handle<RabbitMqConnectionException>();
+            r.Interval(5, TimeSpan.FromSeconds(10));
+        });
+
         cfg.ReceiveEndpoint("search-auction-created", e =>
         {
             e.UseMessageRetry(r => r.Interval(5, 5));
@@ -50,14 +56,9 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-try
-{
-	await DbInitializer.InitDb(app);
-}
-catch (Exception ex)
-{
-	Console.WriteLine(ex.Message);
-}
+await Policy.Handle<TimeoutException>()
+    .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
+    .ExecuteAndCaptureAsync(async () => await DbInitializer.InitDb(app));
 
 app.Run();
 
